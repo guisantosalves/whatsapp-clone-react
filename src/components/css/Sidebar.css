@@ -1,4 +1,6 @@
 .sidebar {
+  display: flex;
+  flex-direction: column;
   flex: 0.35;
 }
 .sidebar__header {
@@ -21,7 +23,6 @@
 }
 
 /* search */
-
 .sidebar__search {
     display: flex;
     align-items: center;
@@ -48,4 +49,12 @@
 .sidebar__searchContainer > .MuiSvgIcon-root{
     color: gray;
     padding: 10px;
+}
+
+
+/* sidebarChats */
+.sidebar__chats {
+    flex: 1;
+    background-color: white;
+    overflow: scroll;
 }
