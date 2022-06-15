@@ -1,6 +1,11 @@
+import { async } from "@firebase/util";
 import { Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./css/SidebarChat.css"
+
+//getting the data from firebase
+import {db} from "../firebase";
+import {collection, addDoc, timestamp} from "firebase/firestore";
 
 function SidebarChat({addNewChat, id, name}){
 
@@ -12,12 +17,25 @@ function SidebarChat({addNewChat, id, name}){
         setSeed(radonValue);
     }, []);
     
-    const createChat = () => {
+    const createChat = async () => {
+
+        //inserting on database.
         const roomName = prompt("Please enter name for chat: ");
         console.log(roomName);
 
         if(roomName){
-            //do something on database
+
+            try{
+
+                await addDoc(collection(db, "rooms"), {
+                    name: roomName
+                })
+                
+            }catch(err){
+
+                alert(err);
+
+            }
         }
     }
 
