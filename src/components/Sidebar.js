@@ -27,6 +27,11 @@ function Sidebar() {
         }))
       );
     });
+
+    return () => {
+      qu();
+    };
+
   }, []);
 
   console.log(rooms);
