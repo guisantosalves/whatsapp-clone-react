@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./css/Sidebar.css";
 import { Avatar, IconButton } from "@mui/material";
 import {
@@ -9,7 +9,28 @@ import {
 } from "@mui/icons-material";
 import SidebarChat from "./SidebarChat";
 
+// firebase configuration
+import { db } from "../firebase";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+
 function Sidebar() {
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    const qu = query(collection(db, "rooms"));
+
+    onSnapshot(qu, (queryResult) => {
+      setRooms(
+        queryResult.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      );
+    });
+  }, []);
+
+  console.log(rooms);
+
   return (
     <div className="sidebar">
       <div className="sidebar__header">
@@ -37,11 +58,10 @@ function Sidebar() {
       </div>
 
       <div className="sidebar__chats">
-          <SidebarChat addNewChat/>
-          <SidebarChat />
-          <SidebarChat />
-          <SidebarChat />
-          <SidebarChat />
+        <SidebarChat addNewChat />
+        {rooms.map((room)=>(
+          <SidebarChat key={room.id} id={room.id} name={room.data.name}/>
+        ))}
       </div>
     </div>
   );
