@@ -23,6 +23,8 @@ function Chat() {
   const sendMessage = (e) => {
     e.preventDefault(); //avoiding that page reload
     console.log(`going to databas: ${input}`)
+
+    setInput("");
   }
 
   return (
