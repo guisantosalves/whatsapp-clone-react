@@ -23,10 +23,13 @@ function Chat() {
   //param passed in url
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
+  const [messages, setMessages] = useState("");
 
   useEffect(() => {
     if (roomId) {
       const qu = query(collection(db, "rooms"));
+
+      const queryMe = query(collection(db, "messages"));
 
       onSnapshot(qu, (queryResult) => {
 
@@ -39,6 +42,14 @@ function Chat() {
           }
 
         });
+
+      });
+
+      //tem que pegar usando a url da consulta dada no firebase
+      //https://stackoverflow.com/questions/55620618/how-to-get-sub-collections-with-firebase-firestore
+      onSnapshot(queryMe, (queryResult) => {
+
+        console.log(queryResult.docs);
 
       });
     }
