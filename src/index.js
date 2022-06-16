@@ -5,11 +5,38 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
+//context api settings
+import { StateProvider } from "./StateProvider";
+
+//reducer settings
+const initialState = {
+  user: null,
+};
+
+const reducer = (state, action) => {
+
+  console.log(action);
+
+  switch(action.type){
+
+    case "SET_USER":
+      return{
+        ...state,
+        user: action.user,
+      };
+
+    default:
+      return state;
+  }
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <StateProvider reducer={reducer} initialState={initialState}>
+        <App />
+      </StateProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

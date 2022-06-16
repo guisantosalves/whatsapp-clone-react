@@ -7,9 +7,14 @@ import Login from "./components/Login";
 //react router
 import { Routes, Route } from "react-router-dom";
 
+//using dataLayer
+import {useStateValue} from "./StateProvider";
+
 //we can use react router in especific elements to do our application more scalable
 function App() {
-  const [user, setUser] = useState(null);
+  
+  //getting the information from datalayer
+  const [{user}, dispatch] = useStateValue();
 
   return (
     <div className="app">
@@ -28,7 +33,7 @@ function App() {
           </Routes>
 
         </div>
-        
+
       )}
     </div>
   );

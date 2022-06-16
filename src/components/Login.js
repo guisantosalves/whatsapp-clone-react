@@ -6,7 +6,12 @@ import "./css/Login.css"
 import {provider} from "../firebase";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
+//getting datalayer
+import {useStateValue} from "../StateProvider";
+
 function Login() {
+    //using the data layer
+    const [{}, dispatch] = useStateValue();
 
     const signIn = () => {
         //using google to login
@@ -15,6 +20,11 @@ function Login() {
         signInWithPopup(auth, provider).then((result)=>{
             
             const user = result.user;
+
+            dispatch({
+                type: "SET_USER",
+                user: user,
+            })
             console.log(user)
 
         }).catch((err)=>{
