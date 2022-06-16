@@ -2,10 +2,26 @@ import { Button } from "@mui/material";
 import React from "react";
 import "./css/Login.css"
 
+//database settings
+import {provider} from "../firebase";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 function Login() {
 
     const signIn = () => {
+        //using google to login
+        const auth = getAuth();
+        
+        signInWithPopup(auth, provider).then((result)=>{
+            
+            const user = result.user;
+            console.log(user)
 
+        }).catch((err)=>{
+
+            alert(err.message)
+
+        })
     }
 
     return(
