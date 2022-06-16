@@ -28,9 +28,6 @@ function Sidebar() {
       );
     });
 
-    return () => {
-      qu();
-    };
 
   }, []);
 
