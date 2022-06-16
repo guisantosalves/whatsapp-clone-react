@@ -20,6 +20,7 @@ function Sidebar() {
     const qu = query(collection(db, "rooms"));
 
     onSnapshot(qu, (queryResult) => {
+      console.log(queryResult.docs);
       setRooms(
         queryResult.docs.map((doc) => ({
           id: doc.id,

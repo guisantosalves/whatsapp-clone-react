@@ -1,27 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Chat from "./components/Chat";
+import Login from "./components/Login";
+
+//react router
 import { Routes, Route } from "react-router-dom";
 
 //we can use react router in especific elements to do our application more scalable
 function App() {
+  const [user, setUser] = useState(null);
+
   return (
     <div className="app">
-      <div className="app__body">
+      {!user ? (
 
-      <Sidebar />
-        <Routes>
-          <Route path="/" />
-          <Route path="/rooms/:id" element={<Chat/>}/>
-        </Routes>
-        {/* sidebar -> 0.35 flex*/}
+        <Login />
+
+      ) : (
+
+        <div className="app__body">
+
+          <Sidebar />
+          <Routes>
+            <Route path="/" />
+            <Route path="/rooms/:roomId" element={<Chat />} />
+          </Routes>
+
+        </div>
         
-
-        {/* chat -> 0.65 flex*/}
-        
-      </div>
-
+      )}
     </div>
   );
 }
