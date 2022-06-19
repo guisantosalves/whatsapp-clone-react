@@ -28,9 +28,9 @@ function Chat() {
   useEffect(() => {
     if (roomId) {
       const qu = query(collection(db, "rooms"));
-
-      const queryMe = query(collection(db, "messages"));
-
+      
+      //getting the messages with url from database
+      const queryMe = query(collection(db, "rooms/2Y2JXNbm8QTtVi6E09p7/messages"));
       onSnapshot(qu, (queryResult) => {
 
         queryResult.docs.map((doc) => {
