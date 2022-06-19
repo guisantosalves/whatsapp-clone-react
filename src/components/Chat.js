@@ -23,38 +23,34 @@ function Chat() {
   //param passed in url
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
-  const [messages, setMessages] = useState("");
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     if (roomId) {
       const qu = query(collection(db, "rooms"));
-      
+
       //getting the messages with url from database
-      const queryMe = query(collection(db, "rooms/2Y2JXNbm8QTtVi6E09p7/messages"));
+      const queryMe = query(collection(db, `rooms/${roomId}/messages`));
       onSnapshot(qu, (queryResult) => {
-
         queryResult.docs.map((doc) => {
-
-          if(doc.id == roomId){
-
+          if (doc.id == roomId) {
             setRoomName(doc.data().name);
-
           }
-
         });
-
       });
 
       //tem que pegar usando a url da consulta dada no firebase
       //https://stackoverflow.com/questions/55620618/how-to-get-sub-collections-with-firebase-firestore
       onSnapshot(queryMe, (queryResult) => {
-
-        console.log(queryResult.docs);
-
+        setMessages(
+          queryResult.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
       });
     }
   }, [roomId]);
-
 
   const sendMessage = (e) => {
     e.preventDefault(); //avoiding that page reload
@@ -63,11 +59,16 @@ function Chat() {
     setInput("");
   };
 
+  messages.map((doc)=>{
+    console.log(doc.data.name)
+  })
   return (
     <div className="chat">
       <div className="chat__header">
         <Avatar
-          src={`https://avatars.dicebear.com/api/avataaars/${Math.floor(Math.random() * 5)}.svg`}
+          src={`https://avatars.dicebear.com/api/avataaars/${Math.floor(
+            Math.random() * 5
+          )}.svg`}
         />
 
         <div className="chat__headerInfo">
@@ -91,11 +92,16 @@ function Chat() {
       </div>
 
       <div className="chat__body">
-        <p className={`chat__message ${true && `chat__reciever`}`}>
-          <span className="chat__name">Guizaodozap</span>
-          eaeae
-          <span className="chat__timestamp">3:52pm</span>
-        </p>
+        
+        {messages.map((message)=>(
+          <p key={message.id} className={`chat__message ${true && `chat__reciever`}`}>
+            <span className="chat__name">{message.data.name}</span>
+              {message.data.message}
+            <span className="chat__timestamp">{new Date(message.data.timestamp?.toDate()).toUTCString()}</span>
+          </p>
+
+        ))}
+        
       </div>
 
       <div className="chat__footer">
