@@ -15,11 +15,18 @@ import { useParams } from "react-router-dom";
 
 //database configuration
 import { db } from "../firebase";
-import { collection, query, onSnapshot, where } from "firebase/firestore";
+import { collection, query, onSnapshot, orderBy, addDoc } from "firebase/firestore";
+import { serverTimestamp } from "firebase/firestore";
+
+//using the datalayer
+import { useStateValue } from "../StateProvider";
 
 function Chat() {
   const [input, setInput] = useState("");
 
+  //getting information from datalayer
+  const [{user}, dispatch] = useStateValue();
+  
   //param passed in url
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
@@ -30,7 +37,8 @@ function Chat() {
       const qu = query(collection(db, "rooms"));
 
       //getting the messages with url from database
-      const queryMe = query(collection(db, `rooms/${roomId}/messages`));
+      const queryMe = query(collection(db, `rooms/${roomId}/messages`), orderBy('timestamp', 'asc'));
+
       onSnapshot(qu, (queryResult) => {
         queryResult.docs.map((doc) => {
           if (doc.id == roomId) {
@@ -52,9 +60,20 @@ function Chat() {
     }
   }, [roomId]);
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault(); //avoiding that page reload
-    console.log(`going to databas: ${input}`);
+    
+    try{
+
+      await addDoc(collection(db, `rooms/${roomId}/messages`), {
+        message: input,
+        name: user.displayName,
+        timestamp: serverTimestamp(),
+      }) 
+
+    }catch(err){
+      alert(err)
+    }
 
     setInput("");
   };
