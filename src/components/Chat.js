@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material";
-import React, { useEffect, useState, u } from "react";
+import React, { useEffect, useState} from "react";
 import "./css/Chat.css";
 import { IconButton } from "@mui/material";
 import {
@@ -68,6 +68,7 @@ function Chat() {
       });
     }
   }, [roomId]);
+
 
   const sendMessage = async (e) => {
     e.preventDefault(); //avoiding that page reload
