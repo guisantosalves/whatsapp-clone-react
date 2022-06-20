@@ -15,7 +15,13 @@ import { useParams } from "react-router-dom";
 
 //database configuration
 import { db } from "../firebase";
-import { collection, query, onSnapshot, orderBy, addDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  addDoc,
+} from "firebase/firestore";
 import { serverTimestamp } from "firebase/firestore";
 
 //using the datalayer
@@ -25,8 +31,8 @@ function Chat() {
   const [input, setInput] = useState("");
 
   //getting information from datalayer
-  const [{user}, dispatch] = useStateValue();
-  
+  const [{ user }, dispatch] = useStateValue();
+
   //param passed in url
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
@@ -37,7 +43,10 @@ function Chat() {
       const qu = query(collection(db, "rooms"));
 
       //getting the messages with url from database
-      const queryMe = query(collection(db, `rooms/${roomId}/messages`), orderBy('timestamp', 'asc'));
+      const queryMe = query(
+        collection(db, `rooms/${roomId}/messages`),
+        orderBy("timestamp", "asc")
+      );
 
       onSnapshot(qu, (queryResult) => {
         queryResult.docs.map((doc) => {
@@ -62,25 +71,22 @@ function Chat() {
 
   const sendMessage = async (e) => {
     e.preventDefault(); //avoiding that page reload
-    
-    try{
 
+    try {
       await addDoc(collection(db, `rooms/${roomId}/messages`), {
         message: input,
         name: user.displayName,
         timestamp: serverTimestamp(),
-      }) 
-
-    }catch(err){
-      alert(err)
+      });
+    } catch (err) {
+      alert(err);
     }
 
     setInput("");
   };
 
-  messages.map((doc)=>{
-    console.log(doc.data.name)
-  })
+  console.log()
+
   return (
     <div className="chat">
       <div className="chat__header">
@@ -92,7 +98,12 @@ function Chat() {
 
         <div className="chat__headerInfo">
           <h3>{roomName}</h3>
-          <p>Last Seen at ..</p>
+          <p>
+            Last Seen{" "}
+            {new Date(
+              messages[messages.length - 1]?.data?.timestamp?.toDate()
+            ).toUTCString()}
+          </p>
         </div>
 
         <div className="chat__headerRight">
@@ -111,22 +122,27 @@ function Chat() {
       </div>
 
       <div className="chat__body">
-        
-        {messages.map((message)=>(
-          <p key={message.id} className={`chat__message ${true && `chat__reciever`}`}>
+        {messages.map((message) => (
+          <p
+            key={message.id}
+            className={`chat__message ${
+              !(message?.name === user?.displayName) && `chat__reciever`
+            }`}
+          >
             <span className="chat__name">{message.data.name}</span>
-              {message.data.message}
-            <span className="chat__timestamp">{new Date(message.data.timestamp?.toDate()).toUTCString()}</span>
+            {message.data.message}
+            <span className="chat__timestamp">
+              {new Date(message.data.timestamp?.toDate()).toUTCString()}
+            </span>
           </p>
-
         ))}
-        
       </div>
 
       <div className="chat__footer">
         <InsertEmoticon />
         <form>
           <input
+            value={input}
             onChange={(e) => setInput(e.target.value)}
             type="text"
             placeholder="type a message"
