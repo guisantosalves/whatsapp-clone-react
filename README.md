@@ -1,5 +1,20 @@
-# Whatsapp clone
+### hello there
 
-<h2>I am working on this project now</h2>
-<h2>You can help me if you want :)</h2>
+You can download my project and run with these steps.
 
+<ul>
+    <li>Cloning the git project</li>
+    <li>npm install</li>
+    <li>npm start</li>
+</ul>
+
+## what am I using ?
+
+<ul>
+    <li>React</li>
+    <li>React Context API</li>
+    <li>Hooks</li>
+    <li>Firebase</li>
+    <li>Google authentication</li>
+    <li>CSS 3</li>
+</ul>
